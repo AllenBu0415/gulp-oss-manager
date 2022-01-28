@@ -1,0 +1,40 @@
+{
+  "name": "gulp-oss-manager",
+  "version": "0.0.1",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rollup -c -o index.js"
+  },
+  "keywords": [
+    "gulpplugin",
+    "oss",
+    "ali-oss"
+  ],
+  "author": "NagateBu",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
+    "@types/ali-oss": "^6.16.2",
+    "@types/chalk": "^0.4.28",
+    "@types/gulp-util": "^3.0.36",
+    "@types/through2": "^2.0.36",
+    "@typescript-eslint/parser": "^5.10.1",
+    "eslint": "^8.7.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "rollup": "^2.66.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "ali-oss": "^6.16.0",
+    "gulp-util": "^3.0.8",
+    "ora": "^5.4.1",
+    "through2": "^4.0.2"
+  }
+}

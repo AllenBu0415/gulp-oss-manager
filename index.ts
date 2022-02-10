@@ -5,12 +5,12 @@ import * as pkg from './package.json'
 import ora from 'ora'
 
 interface OssManager {
-  accessKeyId: string,  // 阿里云账号 AccessKey
-  accessKeySecret: string, // 阿里云账号 AccessKey
-  region: string,  // Bucket所在地域
-  bucket: string,  // Bucket名称
-  customPath?: string, // 上传路径前缀前缀
-  timeout?: number  // 超时时间
+  accessKeyId: string // 阿里云账号 AccessKey
+  accessKeySecret: string // 阿里云账号 AccessKey
+  region: string // Bucket所在地域
+  bucket: string // Bucket名称
+  customPath?: string // 上传路径前缀前缀
+  timeout?: number // 超时时间
 }
 
 const defaultOptions: OssManager = {
@@ -21,7 +21,6 @@ const defaultOptions: OssManager = {
 }
 
 export default function gulpOssManager(_options: OssManager) {
-
   const options = Object.assign(defaultOptions, _options)
 
   if (options == null) {
@@ -32,9 +31,7 @@ export default function gulpOssManager(_options: OssManager) {
 
   const spinner = ora()
 
-  return through.obj(async function(file, enc, cb) {
-
-
+  return through.obj(async function (file, enc, cb) {
     if (file.isNull()) cb(null, file)
 
     if (file.isStream()) this.emit('error', new PluginError(pkg.name, 'Buffers not supported!'))
@@ -42,19 +39,18 @@ export default function gulpOssManager(_options: OssManager) {
     try {
       spinner.start('Upload......')
 
-      let result = await client.put(`${options.customPath != undefined ? options.customPath : ''}/${file.relative}`, file.contents)
+      let result = await client.put(
+        `${options.customPath != undefined ? options.customPath : ''}/${file.relative}`,
+        file.contents
+      )
 
-      setTimeout(() => {
+      if (result.res.status == 200) {
+        spinner.succeed(`${file._base}/${file.relative}  ===>  ${result.url}`)
+      } else {
+        spinner.fail(`${file._base}/${file.relative}`)
+      }
 
-        if (result.res.status == 200) {
-          spinner.succeed(`${file._base}/${file.relative}  ===>  ${result.url}`)
-        } else {
-          spinner.fail(`${file._base}/${file.relative}`)
-        }
-
-        cb(null, file)
-      }, 3000)
-
+      cb(null, file)
     } catch (err: any) {
       this.emit('error', new PluginError(pkg.name, err.message.toString()))
     }

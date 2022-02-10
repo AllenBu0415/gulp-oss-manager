@@ -1,16 +1,4 @@
-'use strict';
-
-var OSS = require('ali-oss');
-var gulpUtil = require('gulp-util');
-var through = require('through2');
-var ora = require('ora');
-
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var OSS__default = /*#__PURE__*/_interopDefaultLegacy(OSS);
-var through__default = /*#__PURE__*/_interopDefaultLegacy(through);
-var ora__default = /*#__PURE__*/_interopDefaultLegacy(ora);
-
+"use strict";var t=require("ali-oss"),e=require("gulp-util"),r=require("through2"),n=require("ora");function u(t){return t&&"object"==typeof t&&"default"in t?t:{default:t}}var i=u(t),o=u(r),s=u(n);
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -25,56 +13,4 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-}
-
-var name = "gulp-oss-manager";
-
-const defaultOptions = {
-    accessKeyId: '',
-    accessKeySecret: '',
-    bucket: '',
-    region: '',
-};
-function gulpOssManager(_options) {
-    const options = Object.assign(defaultOptions, _options);
-    if (options == null) {
-        throw new gulpUtil.PluginError(name, 'Missing options Object!');
-    }
-    const client = new OSS__default["default"](options);
-    const spinner = ora__default["default"]();
-    return through__default["default"].obj(function (file, enc, cb) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (file.isNull())
-                cb(null, file);
-            if (file.isStream())
-                this.emit('error', new gulpUtil.PluginError(name, 'Buffers not supported!'));
-            try {
-                spinner.start('Upload......');
-                let result = yield client.put(`${options.customPath != undefined ? options.customPath : ''}/${file.relative}`, file.contents);
-                setTimeout(() => {
-                    if (result.res.status == 200) {
-                        spinner.succeed(`${file._base}/${file.relative}  ===>  ${result.url}`);
-                    }
-                    else {
-                        spinner.fail(`${file._base}/${file.relative}`);
-                    }
-                    cb(null, file);
-                }, 3000);
-            }
-            catch (err) {
-                this.emit('error', new gulpUtil.PluginError(name, err.message.toString()));
-            }
-        });
-    });
-}
-
-module.exports = gulpOssManager;
+function a(t,e,r,n){return new(r||(r=Promise))((function(u,i){function o(t){try{a(n.next(t))}catch(t){i(t)}}function s(t){try{a(n.throw(t))}catch(t){i(t)}}function a(t){var e;t.done?u(t.value):(e=t.value,e instanceof r?e:new r((function(t){t(e)}))).then(o,s)}a((n=n.apply(t,e||[])).next())}))}var c="gulp-oss-manager";const l={accessKeyId:"",accessKeySecret:"",bucket:"",region:""};module.exports=function(t){const r=Object.assign(l,t);if(null==r)throw new e.PluginError(c,"Missing options Object!");const n=new i.default(r),u=s.default();return o.default.obj((function(t,i,o){return a(this,void 0,void 0,(function*(){t.isNull()&&o(null,t),t.isStream()&&this.emit("error",new e.PluginError(c,"Buffers not supported!"));try{u.start("Upload......");let e=yield n.put(`${null!=r.customPath?r.customPath:""}/${t.relative}`,t.contents);200==e.res.status?u.succeed(`${t._base}/${t.relative}  ===>  ${e.url}`):u.fail(`${t._base}/${t.relative}`),o(null,t)}catch(t){this.emit("error",new e.PluginError(c,t.message.toString()))}}))}))};
